@@ -1,14 +1,46 @@
 html,
 body {
-  --bs-light-rgb: 236, 236, 236;
+  --bs-dark: var(--nat-navbar-bg)
+  --bs-dark-rgb: var(--nat-navbar-bg-rgb)
   box-sizing: border-box;
   height: 100%;
   padding: 0;
   margin: 0;
+  background: url('/light-bg.png') no-repeat center center fixed;
+  background-size: cover;
 }
+
 .wrapper {
   box-sizing: border-box;
   min-height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+:root {
+  --nat-navbar-bg: #ECECEC;
+  --nat-navbar-bg-rgb: 236, 236, 236;
+  --nat-navbar-text-color: white;
+  --nat-footer-bg: #0D3B66;
+}
+
+footer {
+  background-color: var(--nat-footer-bg);
+  color: var(--nat-navbar-text-color);
+}
+
+footer a {
+  color: var(--nat-navbar-text-color);
+}
+
+body .navbar {
+  --bs-navbar-active-color: var(--nat-navbar-highlight-text);
+  --bs-navbar-brand-color: var(--nat-navbar-text-color);
+  --bs-navbar-brand-hover-color: var(--nat-navbar-highlight-text);
+  --bs-navbar-color: var(--nat-navbar-text-color);
+  --bs-navbar-hover-color: var(--nat-navbar-highlight-text);
+}
+
+.bg-dark a.dropdown-item {
+  color: var(--nat-navbar-bg);
 }
