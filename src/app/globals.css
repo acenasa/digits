@@ -1,14 +1,54 @@
+:root {
+  --nat-navbar-bg: #102A43;
+  --nat-navbar-bg-rgb: 16, 42, 67;
+  --nat-navbar-text-color: white;
+  --nat-navbar-highlight-text: khaki;
+  --nat-footer-bg: #102A43;
+}
+
 html,
 body {
-  --bs-light-rgb: 236, 236, 236;
+  --bs-dark: var(--nat-navbar-bg);
+  --bs-dark-rgb: var(--nat-navbar-bg-rgb);
   box-sizing: border-box;
   height: 100%;
   padding: 0;
   margin: 0;
+  background: url('/light-bg.png') no-repeat center center fixed;
+  background-size: cover;
 }
+
 .wrapper {
   box-sizing: border-box;
   min-height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+body .navbar {
+  background-color: var(--nat-navbar-bg) !important;
+  color: var(--nat-navbar-text-color) !important;
+  --bs-navbar-active-color: var(--nat-navbar-highlight-text);
+  --bs-navbar-brand-color: var(--nat-navbar-text-color);
+  --bs-navbar-brand-hover-color: var(--nat-navbar-highlight-text);
+  --bs-navbar-color: var(--nat-navbar-text-color);
+  --bs-navbar-hover-color: var(--nat-navbar-highlight-text);
+}
+
+footer {
+  background-color: var(--nat-footer-bg) !important;
+  color: var(--nat-navbar-text-color);
+}
+
+footer a {
+  color: var(--nat-navbar-text-color);
+}
+
+.bg-dark a.dropdown-item {
+  color: var(--nat-navbar-text-color);
+}
+
+.bg-dark a.dropdown-item:hover {
+  background-color: var(--nat-navbar-highlight-text);
+  color: var(--nat-footer-bg);
 }
