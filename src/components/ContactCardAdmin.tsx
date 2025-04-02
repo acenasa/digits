@@ -1,17 +1,16 @@
-/* eslint-disable import/extensions */
 /* eslint-disable react/prop-types */
 
 'use client';
 
 import { Card, Image } from 'react-bootstrap';
-import { Contact } from '@prisma/client';
+import { Contact } from '@prisma/client'; // or '@prisma/client' if that works
 
-type ContactCardProps = {
+type ContactCardAdminProps = {
   contact: Contact;
 };
 
-const ContactCard: React.FC<ContactCardProps> = ({ contact }) => {
-  const { firstName, lastName, address, image, description } = contact;
+const ContactCardAdmin: React.FC<ContactCardAdminProps> = ({ contact }) => {
+  const { firstName, lastName, address, image, description, owner } = contact;
 
   return (
     <Card className="h-100">
@@ -34,9 +33,10 @@ const ContactCard: React.FC<ContactCardProps> = ({ contact }) => {
       <hr className="my-0" />
       <Card.Body>
         <Card.Text>{description}</Card.Text>
+        <p className="blockquote-footer">{owner}</p>
       </Card.Body>
     </Card>
   );
 };
 
-export default ContactCard;
+export default ContactCardAdmin;
