@@ -2,15 +2,16 @@
 
 'use client';
 
-import { Card, Image } from 'react-bootstrap';
+import { Card, Image, Button } from 'react-bootstrap';
 import type { Contact } from '@prisma/client';
+import Link from 'next/link';
 
 type ContactCardAdminProps = {
-  contact: Contact;
+  contact: Contact & { id: number };
 };
 
 const ContactCardAdmin: React.FC<ContactCardAdminProps> = ({ contact }) => {
-  const { firstName, lastName, address, image, description, owner } = contact;
+  const { id, firstName, lastName, address, image, description, owner } = contact;
   return (
     <Card className="h-100">
       <Card.Header>
@@ -33,6 +34,9 @@ const ContactCardAdmin: React.FC<ContactCardAdminProps> = ({ contact }) => {
       <Card.Body>
         <Card.Text>{description}</Card.Text>
         <p className="blockquote-footer">{owner}</p>
+        <Link href={`/edit/${id}`} passHref>
+          <Button variant="outline-secondary" size="sm">Edit</Button>
+        </Link>
       </Card.Body>
     </Card>
   );
