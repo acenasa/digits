@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 
+/** Stuff Validation * */
 export const AddStuffSchema = Yup.object({
   name: Yup.string().required(),
   quantity: Yup.number().positive().required(),
@@ -15,6 +16,7 @@ export const EditStuffSchema = Yup.object({
   owner: Yup.string().required(),
 });
 
+/** Contact Validation * */
 export const AddContactSchema = Yup.object({
   firstName: Yup.string().required(),
   lastName: Yup.string().required(),
@@ -34,6 +36,14 @@ export const EditContactSchema = Yup.object({
   owner: Yup.string().required(),
 });
 
+/** Note Validation * */
+export const AddNoteSchema = Yup.object({
+  note: Yup.string().required(),
+  contactId: Yup.number().required(),
+  owner: Yup.string().required(),
+});
+
+/** Optional: Contact interface if needed on frontend */
 export interface Contact {
   firstName: string;
   lastName: string;
