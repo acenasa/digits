@@ -1,5 +1,5 @@
 /* eslint-disable no-await-in-loop */
-import { PrismaClient, Role, Condition } from '@prisma/client';
+import { PrismaClient, Role } from '@prisma/client';
 import { hash } from 'bcrypt';
 import * as config from '../config/settings.development.json';
 
@@ -16,21 +16,6 @@ async function main() {
       where: { email: account.email },
       update: {},
       create: { email: account.email, password, role },
-    });
-  }
-
-  for (const [index, data] of config.defaultData.entries()) {
-    const condition = data.condition as Condition;
-    console.log(`  Adding stuff: ${data.name} (${data.owner})`);
-    await prisma.stuff.upsert({
-      where: { id: index + 1 },
-      update: {},
-      create: {
-        name: data.name,
-        quantity: data.quantity,
-        owner: data.owner,
-        condition,
-      },
     });
   }
 

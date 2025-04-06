@@ -26,14 +26,6 @@ model User {
   role     Role   @default(USER)
 }
 
-model Stuff {
-  id        Int       @id @default(autoincrement())
-  name      String
-  quantity  Int
-  condition Condition
-  owner     String
-}
-
 model Contact {
   id          Int     @id @default(autoincrement())
   firstName   String
