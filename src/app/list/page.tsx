@@ -1,22 +1,25 @@
-import { getServerSession } from 'next-auth';
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable @next/next/no-async-client-component */
+
+'use client';
+
 import { Col, Container, Row } from 'react-bootstrap';
 import { prisma } from '@/lib/prisma';
-import ContactCard from '@/components/ContactCard';
+import { getServerSession } from 'next-auth';
 import authOptions from '@/lib/authOptions';
-import { loggedInProtectedPage } from '@/lib/page-protection';
-import type { Contact } from '@prisma/client';
+import ContactCard from '@/components/ContactCard';
+import { Contact, Note } from '@prisma/client';
 
 const ListPage = async () => {
   const session = await getServerSession(authOptions);
-  loggedInProtectedPage(
-    session as {
-      user: { email: string; id: string; randomKey: string };
-    } | null,
-  );
+  const currentUser = session?.user?.email || '';
 
-  const owner = session?.user?.email ?? '';
   const contacts: Contact[] = await prisma.contact.findMany({
-    where: { owner },
+    where: { owner: currentUser },
+  });
+
+  const notes: Note[] = await prisma.note.findMany({
+    where: { owner: currentUser },
   });
 
   return (
@@ -28,9 +31,12 @@ const ListPage = async () => {
           </Col>
         </Row>
         <Row xs={1} md={2} lg={3} className="g-4">
-          {contacts.map((contact) => (
-            <Col key={`Contact-${contact.id}`}>
-              <ContactCard contact={contact} />
+          {contacts.map((contact, index) => (
+            <Col key={`Contact-${index}`}>
+              <ContactCard
+                contact={contact}
+                notes={notes.filter((note) => note.contactId === contact.id)}
+              />
             </Col>
           ))}
         </Row>

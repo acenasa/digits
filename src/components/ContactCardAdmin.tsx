@@ -2,15 +2,17 @@
 
 'use client';
 
-import { Card, Image, Button } from 'react-bootstrap';
-import type { Contact } from '@prisma/client';
+import { Card, Image, Button, ListGroup } from 'react-bootstrap';
+import type { Contact, Note } from '@prisma/client';
 import Link from 'next/link';
+import NoteItem from './NoteItem';
 
 type ContactCardAdminProps = {
   contact: Contact & { id: number };
+  notes: Note[];
 };
 
-const ContactCardAdmin: React.FC<ContactCardAdminProps> = ({ contact }) => {
+const ContactCardAdmin: React.FC<ContactCardAdminProps> = ({ contact, notes }) => {
   const { id, firstName, lastName, address, image, description, owner } = contact;
   return (
     <Card className="h-100">
@@ -34,6 +36,11 @@ const ContactCardAdmin: React.FC<ContactCardAdminProps> = ({ contact }) => {
       <Card.Body>
         <Card.Text>{description}</Card.Text>
         <p className="blockquote-footer">{owner}</p>
+        <ListGroup variant="flush">
+          {notes.map((note) => (
+            <NoteItem key={note.id} note={note} />
+          ))}
+        </ListGroup>
         <Link href={`/edit/${id}`} passHref>
           <Button variant="outline-secondary" size="sm">Edit</Button>
         </Link>
