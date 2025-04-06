@@ -1,42 +1,49 @@
 import { getServerSession } from 'next-auth';
-import { Col, Container, Row } from 'react-bootstrap';
+import { redirect } from 'next/navigation';
+import { authOptions } from '@/lib/authOptions';
 import { prisma } from '@/lib/prisma';
 import ContactCard from '@/components/ContactCard';
-import authOptions from '@/lib/authOptions';
-import { loggedInProtectedPage } from '@/lib/page-protection';
-import type { Contact } from '@prisma/client';
+import ContactCardAdmin from '@/components/ContactCardAdmin';
+import { Contact, Note } from '@prisma/client';
 
-const ListPage = async () => {
+const ListContacts = async () => {
   const session = await getServerSession(authOptions);
-  loggedInProtectedPage(
-    session as {
-      user: { email: string; id: string; randomKey: string };
-    } | null,
-  );
+  if (!session || !session.user?.email) {
+    redirect('/auth/signin');
+  }
 
-  const owner = session?.user?.email ?? '';
   const contacts: Contact[] = await prisma.contact.findMany({
-    where: { owner },
+    where: { owner: session.user.email },
+    orderBy: { lastName: 'asc' },
+  });
+
+  const notes: Note[] = await prisma.note.findMany({
+    where: { owner: session.user.email },
+    orderBy: { createdAt: 'asc' },
   });
 
   return (
-    <main>
-      <Container id="list" fluid className="py-3">
-        <Row>
-          <Col>
-            <h1 className="text-center">List Contacts</h1>
-          </Col>
-        </Row>
-        <Row xs={1} md={2} lg={3} className="g-4">
-          {contacts.map((contact) => (
-            <Col key={`Contact-${contact.id}`}>
-              <ContactCard contact={contact} />
-            </Col>
-          ))}
-        </Row>
-      </Container>
-    </main>
+    <div className="container py-3">
+      <h2 className="text-center">List Contacts</h2>
+      <div className="row row-cols-1 row-cols-md-3 g-4">
+        {contacts.map((contact, index) => (
+          <div key={index} className="col">
+            {session.user.email === 'admin@foo.com' ? (
+              <ContactCardAdmin
+                contact={contact}
+                notes={notes.filter((note) => note.contactId === contact.id)}
+              />
+            ) : (
+              <ContactCard
+                contact={contact}
+                notes={notes.filter((note) => note.contactId === contact.id)}
+              />
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 
-export default ListPage;
+export default ListContacts;

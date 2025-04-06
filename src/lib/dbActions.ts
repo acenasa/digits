@@ -5,32 +5,19 @@ import { hash } from 'bcrypt';
 import { redirect } from 'next/navigation';
 import { prisma } from './prisma';
 
-/**
- * Adds a new stuff to the database.
- */
+/** STUFF CRUD * */
 export async function addStuff(stuff: { name: string; quantity: number; owner: string; condition: string }) {
   let condition: Condition = 'good';
-  if (stuff.condition === 'poor') {
-    condition = 'poor';
-  } else if (stuff.condition === 'excellent') {
-    condition = 'excellent';
-  } else {
-    condition = 'fair';
-  }
+  if (stuff.condition === 'poor') condition = 'poor';
+  else if (stuff.condition === 'excellent') condition = 'excellent';
+  else condition = 'fair';
+
   await prisma.stuff.create({
-    data: {
-      name: stuff.name,
-      quantity: stuff.quantity,
-      owner: stuff.owner,
-      condition,
-    },
+    data: { name: stuff.name, quantity: stuff.quantity, owner: stuff.owner, condition },
   });
   redirect('/list');
 }
 
-/**
- * Edits an existing stuff in the database.
- */
 export async function editStuff(stuff: Stuff) {
   await prisma.stuff.update({
     where: { id: stuff.id },
@@ -44,45 +31,23 @@ export async function editStuff(stuff: Stuff) {
   redirect('/list');
 }
 
-/**
- * Deletes an existing stuff from the database.
- */
 export async function deleteStuff(id: number) {
-  await prisma.stuff.delete({
-    where: { id },
-  });
+  await prisma.stuff.delete({ where: { id } });
   redirect('/list');
 }
 
-/**
- * Creates a new user in the database.
- */
+/** USERS * */
 export async function createUser(credentials: { email: string; password: string }) {
   const password = await hash(credentials.password, 10);
-  await prisma.user.create({
-    data: {
-      email: credentials.email,
-      password,
-    },
-  });
+  await prisma.user.create({ data: { email: credentials.email, password } });
 }
 
-/**
- * Changes the password of an existing user.
- */
 export async function changePassword(credentials: { email: string; password: string }) {
   const password = await hash(credentials.password, 10);
-  await prisma.user.update({
-    where: { email: credentials.email },
-    data: {
-      password,
-    },
-  });
+  await prisma.user.update({ where: { email: credentials.email }, data: { password } });
 }
 
-/**
- * Adds a new contact to the database.
- */
+/** CONTACTS * */
 export async function addContact(contact: {
   firstName: string;
   lastName: string;
@@ -91,15 +56,10 @@ export async function addContact(contact: {
   description: string;
   owner: string;
 }) {
-  await prisma.contact.create({
-    data: contact,
-  });
+  await prisma.contact.create({ data: contact });
   redirect('/list');
 }
 
-/**
- * Edits an existing contact in the database.
- */
 export async function editContact(contact: {
   id: number;
   firstName: string;
@@ -118,6 +78,22 @@ export async function editContact(contact: {
       image: contact.image,
       description: contact.description,
       owner: contact.owner,
+    },
+  });
+  redirect('/list');
+}
+
+/** NOTES * */
+export async function addNote(note: {
+  note: string;
+  contactId: number;
+  owner: string;
+}) {
+  await prisma.note.create({
+    data: {
+      note: note.note,
+      contactId: note.contactId,
+      owner: note.owner,
     },
   });
   redirect('/list');
